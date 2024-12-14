@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Cormorant_Garamond, Montserrat } from "next/font/google";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -14,6 +15,7 @@ const montserrat = Montserrat({
 });
 
 const BaseLayout = ({ children, isLoggedIn = true }) => {
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -21,9 +23,7 @@ const BaseLayout = ({ children, isLoggedIn = true }) => {
   };
 
   const handleLogout = () => {
-    // Add your logout logic here
-    console.log("Logging out...");
-    // Redirect to home or login page after logout
+    router.push("/page/Logout");
   };
 
   return (
