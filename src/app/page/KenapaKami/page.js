@@ -3,7 +3,7 @@ import { CheckCircle } from "lucide-react";
 
 export default function WhyUs() {
   return (
-    <div className="bg-gray-50 py-12" style={{ height: "66vh" }}>
+    <div className="bg-gray-50 py-12 min-h-screen lg:min-h-[66vh]">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
           <h2 className="text-3xl sm:text-4xl font-semibold text-gray-800">
@@ -16,7 +16,7 @@ export default function WhyUs() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pb-8">
           <div className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-all duration-300">
             <CheckCircle className="mx-auto text-pink-500 mb-4" size={48} />
             <h3 className="text-xl font-semibold text-gray-800 mb-3">
