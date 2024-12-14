@@ -140,7 +140,7 @@ const BaseLayout = ({ children }) => {
                   Portfolio
                 </Link>
                 <Link
-                  href="/login"
+                  href="/page/Login"
                   className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
                   onClick={toggleMobileMenu}
                 >
