@@ -74,7 +74,7 @@ const BaseLayout = ({ children, isLoggedIn = true }) => {
               {isLoggedIn ? (
                 <>
                   <Link
-                    href="/profile"
+                    href="/page/Profile"
                     className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
                   >
                     Profile
@@ -165,7 +165,7 @@ const BaseLayout = ({ children, isLoggedIn = true }) => {
                 {isLoggedIn ? (
                   <>
                     <Link
-                      href="/profile"
+                      href="/page/Profile"
                       className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
                       onClick={toggleMobileMenu}
                     >
