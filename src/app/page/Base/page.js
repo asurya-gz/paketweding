@@ -13,11 +13,17 @@ const montserrat = Montserrat({
   weight: ["400", "500"],
 });
 
-const BaseLayout = ({ children }) => {
+const BaseLayout = ({ children, isLoggedIn = true }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const handleLogout = () => {
+    // Add your logout logic here
+    console.log("Logging out...");
+    // Redirect to home or login page after logout
   };
 
   return (
@@ -65,12 +71,29 @@ const BaseLayout = ({ children }) => {
               >
                 Portfolio
               </Link>
-              <Link
-                href="/page/Login"
-                className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
-              >
-                Masuk
-              </Link>
+              {isLoggedIn ? (
+                <>
+                  <Link
+                    href="/profile"
+                    className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <Link
+                  href="/page/Login"
+                  className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
+                >
+                  Masuk
+                </Link>
+              )}
             </div>
 
             {/* Tombol Mobile Menu */}
@@ -139,13 +162,34 @@ const BaseLayout = ({ children }) => {
                 >
                   Portfolio
                 </Link>
-                <Link
-                  href="/page/Login"
-                  className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
-                  onClick={toggleMobileMenu}
-                >
-                  Masuk
-                </Link>
+                {isLoggedIn ? (
+                  <>
+                    <Link
+                      href="/profile"
+                      className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
+                      onClick={toggleMobileMenu}
+                    >
+                      Profile
+                    </Link>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        toggleMobileMenu();
+                      }}
+                      className="text-gray-800 hover:text-black text-sm tracking-widest uppercase text-left"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    href="/page/Login"
+                    className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
+                    onClick={toggleMobileMenu}
+                  >
+                    Masuk
+                  </Link>
+                )}
               </div>
             </div>
           )}
