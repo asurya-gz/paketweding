@@ -321,7 +321,7 @@ const ContentArea = ({ activeMenu }) => {
       case "order-management":
         return <OrderManagement />;
       default:
-        return <TeamManagements />;
+        return <TeamManagement />;
     }
   };
 
