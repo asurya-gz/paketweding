@@ -37,12 +37,16 @@ const ServiceDetailModal = ({ isOpen, onClose, service }) => {
 
           {/* Content */}
           <div>
-            <h3 className="text-2xl font-light text-gray-900">
+            <h2 className="text-3xl font-light text-gray-900 mb-4">
+              {service.title}
+            </h2>
+
+            <h3 className="text-xl font-medium text-gray-800 mb-4">
               {service.packageName}
             </h3>
 
             <div className="mt-4">
-              <div className="aspect-video w-full overflow-hidden rounded-lg">
+              <div className="aspect-video w-full overflow-hidden rounded-lg mb-6">
                 <img
                   src={service.image}
                   alt={service.packageName}
@@ -51,16 +55,50 @@ const ServiceDetailModal = ({ isOpen, onClose, service }) => {
               </div>
 
               <div className="mt-4">
-                <p className="text-2xl font-semibold text-gray-900">
+                <p className="text-2xl font-semibold text-pink-600 mb-4">
                   {new Intl.NumberFormat("id-ID", {
                     style: "currency",
                     currency: "IDR",
                   }).format(service.price)}
                 </p>
 
-                <p className="mt-4 text-gray-600 leading-relaxed">
+                <p className="mt-4 text-gray-600 leading-relaxed mb-6">
                   {service.description}
                 </p>
+
+                {/* Highlights Section */}
+                {service.highlights && service.highlights.length > 0 && (
+                  <div className="mb-6">
+                    <h4 className="text-lg font-semibold text-gray-800 mb-3">
+                      Highlights Layanan
+                    </h4>
+                    <ul className="space-y-2 text-gray-600 list-disc list-inside">
+                      {service.highlights.map((highlight, index) => (
+                        <li key={index} className="text-sm">
+                          {highlight}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Action Button */}
+                <div className="mt-6 border-t pt-4">
+                  <button
+                    className="
+                      w-full
+                      bg-pink-600 
+                      text-white 
+                      px-6 
+                      py-3 
+                      rounded-lg 
+                      hover:bg-pink-700 
+                      transition-colors
+                    "
+                  >
+                    Pesan Sekarang
+                  </button>
+                </div>
               </div>
             </div>
           </div>

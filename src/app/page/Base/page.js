@@ -66,7 +66,7 @@ const BaseLayout = ({ children, isLoggedIn = true }) => {
                 Layanan
               </Link>
               <Link
-                href="/portfolio"
+                href="/page/Portofolio"
                 className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
               >
                 Portfolio
@@ -156,7 +156,7 @@ const BaseLayout = ({ children, isLoggedIn = true }) => {
                   Layanan
                 </Link>
                 <Link
-                  href="/portfolio"
+                  href="/page/Portofolio"
                   className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
                   onClick={toggleMobileMenu}
                 >
