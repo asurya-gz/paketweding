@@ -62,7 +62,7 @@ const OrderManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
+    <div className="min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8 text-gray-600">
       {/* Header Section */}
       <div className="mb-8">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
