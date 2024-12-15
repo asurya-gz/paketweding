@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import {
   Users,
-  Briefcase,
   List,
   Settings,
   Image,
@@ -14,7 +13,6 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import TeamManagement from "./page/Team/page";
-import Dashboard from "./page/Dashboard/page";
 import Catalog from "./page/Caatalog/page";
 import ServiceManagement from "./page/Layanan/page";
 import PortfolioManagement from "./page/Portofolio/page";
@@ -323,7 +321,7 @@ const ContentArea = ({ activeMenu }) => {
       case "order-management":
         return <OrderManagement />;
       default:
-        return <Dashboard />;
+        return <TeamManagements />;
     }
   };
 
