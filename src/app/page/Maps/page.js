@@ -31,7 +31,7 @@ export default function LocationPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Informasi Kontak */}
-          <div className="space-y-6 p-6 bg-pink-50 rounded-lg">
+          <div className="space-y-6 p-6 bg-gray-50 rounded-lg">
             <div>
               <h3 className="text-xl font-semibold text-black mb-2">
                 Alamat Kantor
@@ -92,7 +92,7 @@ export default function LocationPage() {
             Petunjuk Arah
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-pink-50 p-6 rounded-lg">
+            <div className="bg-gray-50 p-6 rounded-lg">
               <h4 className="text-lg font-semibold mb-4 text-gray-600">
                 Dari Arah Jakarta
               </h4>
@@ -101,7 +101,7 @@ export default function LocationPage() {
                 ikuti Jalan Gading Serpong Boulevard
               </p>
             </div>
-            <div className="bg-pink-50 p-6 rounded-lg">
+            <div className="bg-gray-50 p-6 rounded-lg">
               <h4 className="text-lg font-semibold mb-4 text-gray-600">
                 Dari Arah Tangerang
               </h4>
@@ -110,7 +110,7 @@ export default function LocationPage() {
                 utama
               </p>
             </div>
-            <div className="bg-pink-50 p-6 rounded-lg">
+            <div className="bg-gray-50 p-6 rounded-lg">
               <h4 className="text-lg font-semibold mb-4 text-gray-600">
                 Transportasi Umum
               </h4>

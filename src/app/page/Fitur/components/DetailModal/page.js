@@ -81,24 +81,6 @@ const ServiceDetailModal = ({ isOpen, onClose, service }) => {
                     </ul>
                   </div>
                 )}
-
-                {/* Action Button */}
-                <div className="mt-6 border-t pt-4">
-                  <button
-                    className="
-                      w-full
-                      bg-pink-600 
-                      text-white 
-                      px-6 
-                      py-3 
-                      rounded-lg 
-                      hover:bg-pink-700 
-                      transition-colors
-                    "
-                  >
-                    Pesan Sekarang
-                  </button>
-                </div>
               </div>
             </div>
           </div>

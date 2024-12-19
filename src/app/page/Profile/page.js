@@ -1,118 +1,176 @@
-"use client";
-import React, { useState } from "react";
-import Link from "next/link";
-import { ArrowLeft, Mail, Phone, User } from "lucide-react";
+import React from "react";
 import { Cormorant_Garamond, Montserrat } from "next/font/google";
+import { Users, Heart, Clock, Award } from "lucide-react";
+import BaseLayout from "../Base/page";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  weight: ["300", "600"],
+  weight: ["300"],
 });
 
 const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500"],
 });
 
-export default function ProfilePage() {
-  const [profileData, setProfileData] = useState({
-    name: "Muhammad Alif Prasetyo",
-    email: "alif.prasetyo@example.com",
-    phone: "+62 812-3456-7890",
-    address: "Jl. Sudirman No. 123, Jakarta Pusat",
-  });
+const Profile = () => {
+  const services = [
+    {
+      title: "All In Package",
+      description:
+        "Layanan lengkap mencakup wedding organizer, dekorasi, catering, dokumentasi, dan entertainment untuk pernikahan impian Anda.",
+      features: [
+        "Wedding Organizer",
+        "Dekorasi",
+        "Catering",
+        "Dokumentasi",
+        "Entertainment",
+      ],
+    },
+    {
+      title: "Standard Package",
+      description:
+        "Paket dasar yang dapat disesuaikan dengan kebutuhan dan anggaran Anda.",
+      features: ["Wedding Organizer", "Dekorasi", "Dokumentasi"],
+    },
+    {
+      title: "Custom Package",
+      description:
+        "Kebebasan memilih layanan sesuai kebutuhan spesifik pernikahan Anda.",
+      features: ["Fleksibel", "Personalisasi", "Konsultasi Pribadi"],
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50 relative">
-      {/* Header with background image */}
-      <div className="relative h-48 md:h-64 bg-gradient-to-r from-pink-500 to-purple-600">
-        <div className="absolute inset-0">
-          <img
-            src="/bg.jpg"
-            alt="Profile Background"
-            className="w-full h-full object-cover opacity-20"
-          />
-        </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 h-full flex items-center">
-          <Link
-            href="/"
-            className="absolute top-4 left-4 text-white hover:bg-white/10 p-2 rounded-full transition-colors"
-          >
-            <ArrowLeft size={24} />
-          </Link>
-          <h1
-            className={`${cormorant.className} text-2xl md:text-4xl text-white font-semibold ml-12 md:ml-16`}
-          >
-            Profil Saya
-          </h1>
-        </div>
-      </div>
+    <BaseLayout>
+      {" "}
+      <div className={`w-full bg-white ${montserrat.className} text-gray-600`}>
+        {/* Hero Section */}
+        <section className="relative h-[60vh] bg-gray-100 flex items-center justify-center">
+          <div className="text-center px-4 max-w-4xl mx-auto">
+            <h1 className={`text-4xl md:text-5xl mb-4 ${cormorant.className}`}>
+              DEWA MANAGEMENT
+            </h1>
+            <p className="text-gray-600 text-sm md:text-base tracking-wider max-w-2xl mx-auto">
+              Mewujudkan pernikahan impian dengan sentuhan elegan dan
+              profesional
+            </p>
+          </div>
+        </section>
 
-      {/* Main Content */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 md:-mt-24">
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-          <div className="p-4 md:p-8">
-            {/* Profile Header */}
-            <div className="mb-6">
-              <h2
-                className={`${cormorant.className} text-2xl md:text-3xl font-semibold text-gray-900 text-center`}
-              >
-                {profileData.name}
-              </h2>
-            </div>
-
-            {/* Profile Information */}
-            <div className="mt-6 md:mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              <ProfileField
-                icon={<User size={20} />}
-                label="Nama Lengkap"
-                value={profileData.name}
-              />
-              <ProfileField
-                icon={<Mail size={20} />}
-                label="Email"
-                value={profileData.email}
-              />
-              <ProfileField
-                icon={<Phone size={20} />}
-                label="Nomor Telepon"
-                value={profileData.phone}
-              />
-            </div>
-
-            {/* Logout Section */}
-            <div className="mt-8 md:mt-12 pt-6 border-t border-gray-200">
-              <Link
-                href="/page/Login"
-                className="inline-flex items-center text-gray-700 hover:text-gray-900 transition-colors"
-              >
-                <span className={`${montserrat.className} text-sm font-medium`}>
-                  Keluar dari akun
-                </span>
-              </Link>
+        {/* About Section */}
+        <section className="py-20 px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className={`text-3xl text-center mb-12 ${cormorant.className}`}>
+              Tentang Kami
+            </h2>
+            <div className="prose mx-auto text-gray-600 space-y-6 text-center max-w-3xl">
+              <p className="leading-relaxed">
+                Dewa Management adalah penyedia jasa wedding organizer
+                profesional yang berdedikasi untuk menciptakan momen pernikahan
+                yang tak terlupakan. Dengan pengalaman dan keahlian kami, kami
+                berkomitmen untuk menghadirkan sentuhan elegan dalam setiap
+                detail pernikahan Anda.
+              </p>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+        </section>
 
-// Profile Field Component
-const ProfileField = ({ icon, label, value }) => {
-  return (
-    <div className="space-y-2">
-      <label
-        className={`${montserrat.className} flex items-center text-xs md:text-sm font-medium text-gray-700`}
-      >
-        <span className="mr-2 text-gray-400">{icon}</span>
-        {label}
-      </label>
-      <p
-        className={`${montserrat.className} text-gray-900 text-sm md:text-base break-words`}
-      >
-        {value}
-      </p>
-    </div>
+        {/* Vision & Mission */}
+        <section className="py-20 px-4 bg-gray-50">
+          <div className="max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-12">
+              <div className="text-center">
+                <h3 className={`text-2xl mb-6 ${cormorant.className}`}>Visi</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Menjadi wedding organizer terpercaya yang menghadirkan
+                  kebahagiaan dan kesempurnaan dalam setiap momen pernikahan
+                  klien kami.
+                </p>
+              </div>
+              <div className="text-center">
+                <h3 className={`text-2xl mb-6 ${cormorant.className}`}>Misi</h3>
+                <ul className="text-gray-600 space-y-4 list-none p-0">
+                  <li>
+                    Memberikan pelayanan profesional dan berkualitas tinggi
+                  </li>
+                  <li>Menciptakan konsep pernikahan yang unik dan personal</li>
+                  <li>Menjalin hubungan yang baik dengan klien dan vendor</li>
+                  <li>
+                    Mengutamakan kepuasan klien dalam setiap aspek layanan
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Values */}
+        <section className="py-20 px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className={`text-3xl text-center mb-16 ${cormorant.className}`}>
+              Nilai-Nilai Kami
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <div className="text-center">
+                <Users className="w-8 h-8 mx-auto mb-4 text-gray-700" />
+                <h4 className="text-sm uppercase tracking-wider mb-2">
+                  Profesional
+                </h4>
+              </div>
+              <div className="text-center">
+                <Heart className="w-8 h-8 mx-auto mb-4 text-gray-700" />
+                <h4 className="text-sm uppercase tracking-wider mb-2">
+                  Dedikasi
+                </h4>
+              </div>
+              <div className="text-center">
+                <Clock className="w-8 h-8 mx-auto mb-4 text-gray-700" />
+                <h4 className="text-sm uppercase tracking-wider mb-2">
+                  Tepat Waktu
+                </h4>
+              </div>
+              <div className="text-center">
+                <Award className="w-8 h-8 mx-auto mb-4 text-gray-700" />
+                <h4 className="text-sm uppercase tracking-wider mb-2">
+                  Kualitas
+                </h4>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Services */}
+        <section className="py-20 px-4 bg-gray-50">
+          <div className="max-w-4xl mx-auto">
+            <h2 className={`text-3xl text-center mb-16 ${cormorant.className}`}>
+              Layanan Kami
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              {services.map((service, index) => (
+                <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
+                  <h3 className={`text-xl mb-4 ${cormorant.className}`}>
+                    {service.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm mb-6">
+                    {service.description}
+                  </p>
+                  <ul className="text-gray-600 text-sm space-y-2">
+                    {service.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center">
+                        <span className="w-1.5 h-1.5 bg-gray-400 rounded-full mr-2"></span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    </BaseLayout>
   );
 };
+
+export default Profile;

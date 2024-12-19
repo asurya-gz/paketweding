@@ -18,6 +18,7 @@ import ServiceManagement from "./page/Layanan/page";
 import PortfolioManagement from "./page/Portofolio/page";
 import UserManagement from "./page/User/page";
 import OrderManagement from "./page/Order/page";
+import DashboardAdmin from "./page/Dashboard/page";
 
 // Logout Modal Component
 const LogoutModal = ({ isOpen, onClose, onConfirm }) => {
@@ -182,6 +183,11 @@ const Sidebar = ({
   const menuItems = [
     {
       icon: <Users size={20} />,
+      label: "Dashboard",
+      key: "dashboard",
+    },
+    {
+      icon: <Users size={20} />,
       label: "Manajemen Tim",
       key: "team-management",
     },
@@ -308,6 +314,8 @@ const Sidebar = ({
 const ContentArea = ({ activeMenu }) => {
   const renderContent = () => {
     switch (activeMenu) {
+      case "dashboard":
+        return <DashboardAdmin />;
       case "team-management":
         return <TeamManagement />;
       case "catalog":
@@ -321,7 +329,7 @@ const ContentArea = ({ activeMenu }) => {
       case "order-management":
         return <OrderManagement />;
       default:
-        return <TeamManagement />;
+        return <DashboardAdmin />;
     }
   };
 

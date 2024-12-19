@@ -54,10 +54,16 @@ const BaseLayout = ({ children, isLoggedIn = true }) => {
             {/* Menu Desktop */}
             <div className="hidden md:flex space-x-6 lg:space-x-12">
               <Link
-                href="/page/Katalog"
+                href="/"
                 className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
               >
-                Katalog
+                Utama
+              </Link>
+              <Link
+                href="/page/Profile"
+                className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
+              >
+                Tentang Kami
               </Link>
               <Link
                 href="/page/Fitur"
@@ -66,19 +72,19 @@ const BaseLayout = ({ children, isLoggedIn = true }) => {
                 Layanan
               </Link>
               <Link
-                href="/page/Portofolio"
+                href="/page/Review"
                 className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
               >
-                Portfolio
+                Review
+              </Link>
+              <Link
+                href="/page/Tim"
+                className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
+              >
+                Tim
               </Link>
               {isLoggedIn ? (
                 <>
-                  <Link
-                    href="/page/Profile"
-                    className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
-                  >
-                    Profile
-                  </Link>
                   <button
                     onClick={handleLogout}
                     className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
@@ -142,11 +148,18 @@ const BaseLayout = ({ children, isLoggedIn = true }) => {
             <div className="absolute top-full left-0 w-full bg-white shadow-lg md:hidden">
               <div className="flex flex-col space-y-4 p-4">
                 <Link
-                  href="/page/Katalog"
+                  href="/"
                   className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
                   onClick={toggleMobileMenu}
                 >
-                  Katalog
+                  Utama
+                </Link>
+                <Link
+                  href="/page/Profile"
+                  className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
+                  onClick={toggleMobileMenu}
+                >
+                  Tentang Kami
                 </Link>
                 <Link
                   href="/page/Fitur"
@@ -156,11 +169,11 @@ const BaseLayout = ({ children, isLoggedIn = true }) => {
                   Layanan
                 </Link>
                 <Link
-                  href="/page/Portofolio"
+                  href="/page/Review"
                   className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
                   onClick={toggleMobileMenu}
                 >
-                  Portfolio
+                  Review
                 </Link>
                 {isLoggedIn ? (
                   <>

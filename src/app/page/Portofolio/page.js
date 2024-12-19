@@ -1,7 +1,18 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { Cormorant_Garamond, Montserrat } from "next/font/google";
 import { ChevronLeft, Search, X, Maximize2, Minimize2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300"],
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
 
 const portfolioCategories = [
   "Semua Acara",
@@ -102,31 +113,20 @@ export default function PortfolioPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Back Button */}
-        <div className="absolute top-4 left-4 z-10">
-          <button
-            onClick={goBack}
-            className="flex items-center text-gray-700 hover:text-pink-500 transition-colors"
-          >
-            <ChevronLeft size={24} className="mr-2" />
-            <span className="text-sm font-medium">Kembali</span>
-          </button>
-        </div>
-
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-semibold text-gray-800 mb-4">
+    <div className={`bg-white py-20 ${montserrat.className} text-gray-600`}>
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="text-center mb-16">
+          <h1 className={`text-4xl mb-6 ${cormorant.className} text-gray-800`}>
             Portfolio Kami
           </h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-gray-600 text-sm md:text-base tracking-wider max-w-2xl mx-auto">
             Setiap pernikahan adalah cerita unik. Temukan inspirasi dari koleksi
             momen istimewa yang telah kami hadirkan.
           </p>
         </div>
 
         {/* Category Filters */}
-        <div className="flex flex-wrap justify-center gap-4 mb-10">
+        <div className="flex flex-wrap justify-center gap-4 mb-16">
           {portfolioCategories.map((category) => (
             <button
               key={category}
@@ -135,8 +135,8 @@ export default function PortfolioPage() {
                 px-4 py-2 rounded-full text-sm font-medium transition-all
                 ${
                   activeCategory === category
-                    ? "bg-pink-500 text-white"
-                    : "bg-white text-gray-700 hover:bg-pink-100"
+                    ? "bg-gray-700 text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
                 }
               `}
             >
@@ -146,40 +146,38 @@ export default function PortfolioPage() {
         </div>
 
         {/* Portfolio Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           {filteredPortfolio.map((item) => (
             <div
               key={item.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-xl transition-all duration-300 cursor-pointer"
+              className="text-center p-6 bg-white rounded-lg hover:shadow-md transition-shadow cursor-pointer"
               onClick={() => openImageModal(item)}
             >
-              <div className="relative overflow-hidden">
+              <div className="relative overflow-hidden rounded-lg mb-4">
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-300"
+                  className="w-full h-64 object-cover transform hover:scale-110 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
                   <Search
-                    className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    className="text-white opacity-0 hover:opacity-100 transition-opacity duration-300"
                     size={48}
                   />
                 </div>
               </div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-gray-600 text-sm">{item.description}</p>
-              </div>
+              <h3 className={`text-xl mb-3 ${cormorant.className}`}>
+                {item.title}
+              </h3>
+              <p className="text-gray-600 text-sm">{item.description}</p>
             </div>
           ))}
         </div>
 
-        {/* Image Modal - Improved Responsive Design */}
+        {/* Image Modal */}
         {selectedImage && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4 overflow-hidden"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4"
             onClick={closeImageModal}
           >
             <div
@@ -212,7 +210,9 @@ export default function PortfolioPage() {
               <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-4 text-white">
                 <div className="flex justify-between items-center">
                   <div>
-                    <h3 className="text-xl sm:text-2xl font-semibold">
+                    <h3
+                      className={`text-xl sm:text-2xl ${cormorant.className}`}
+                    >
                       {selectedImage.title}
                     </h3>
                     <p className="text-sm sm:text-base">

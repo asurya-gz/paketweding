@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Cormorant_Garamond } from "next/font/google";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -92,8 +93,25 @@ export default function CatalogPage() {
     nama: "",
     email: "",
     telepon: "",
-    bukti_pembayaran: null,
+    payment_method: "",
   });
+
+  const paymentMethods = [
+    { id: "ewallet", name: "E-Wallet (GoPay, OVO, Dana)" },
+    { id: "bank", name: "Transfer Bank" },
+    { id: "credit_card", name: "Kartu Kredit" },
+  ];
+
+  const handlePaymentMethodChange = (e) => {
+    setFormData({ ...formData, payment_method: e.target.value });
+  };
+
+  const handlePayment = (e) => {
+    e.preventDefault();
+    console.log("Metode Pembayaran:", formData.payment_method);
+    // Integrasikan dengan API Payment Gateway di sini
+  };
+
   const router = useRouter();
 
   const handleBuyClick = (service) => {
@@ -441,10 +459,7 @@ export default function CatalogPage() {
                   Form Pembayaran
                 </h3>
 
-                <form
-                  onSubmit={handleSubmit}
-                  className="space-y-3 md:space-y-4"
-                >
+                <form className="space-y-3 md:space-y-4">
                   <div>
                     <label className="block text-gray-700 mb-1 md:mb-2 text-sm md:text-base">
                       Nama Lengkap
@@ -489,34 +504,29 @@ export default function CatalogPage() {
 
                   <div>
                     <h4 className="text-base md:text-lg font-semibold mb-2 md:mb-3">
-                      Rekening Pembayaran
+                      Pilih Metode Pembayaran
                     </h4>
                     <div className="space-y-2">
-                      {rekening.map((rek, index) => (
-                        <div
-                          key={index}
-                          className="bg-gray-100 p-2 md:p-3 rounded-lg text-sm md:text-base"
-                        >
-                          <p className="font-semibold">{rek.bank}</p>
-                          <p>No. Rekening: {rek.nomor}</p>
-                          <p>A/n: {rek.atas_nama}</p>
+                      {paymentMethods.map((method, index) => (
+                        <div key={index} className="flex items-center">
+                          <input
+                            type="radio"
+                            id={`method-${index}`}
+                            name="payment_method"
+                            value={method.id}
+                            onChange={handlePaymentMethodChange} // Fungsi untuk menangani pilihan metode pembayaran
+                            required
+                            className="mr-2"
+                          />
+                          <label
+                            htmlFor={`method-${index}`}
+                            className="text-sm md:text-base"
+                          >
+                            {method.name}
+                          </label>
                         </div>
                       ))}
                     </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-700 mb-1 md:mb-2 text-sm md:text-base">
-                      Upload Bukti Pembayaran
-                    </label>
-                    <input
-                      type="file"
-                      name="bukti_pembayaran"
-                      onChange={handleInputChange}
-                      accept="image/*"
-                      required
-                      className="w-full px-2 py-1 md:px-3 md:py-2 border rounded-md text-sm md:text-base file:mr-4 file:rounded-full file:border-0 file:bg-pink-50 file:px-2 file:py-1 md:file:px-4 md:file:py-2 file:text-pink-700 hover:file:bg-pink-100"
-                    />
                   </div>
 
                   <div className="flex justify-between space-x-4 pt-2 md:pt-4">
@@ -527,12 +537,15 @@ export default function CatalogPage() {
                     >
                       Batal
                     </button>
-                    <button
-                      type="submit"
-                      className="w-full bg-pink-600 text-white px-2 py-1 md:px-4 md:py-2 rounded-md text-sm md:text-base hover:bg-pink-700 transition"
-                    >
-                      Konfirmasi Pembayaran
-                    </button>
+                    <Link href="/page/DetailPembayaran">
+                      {" "}
+                      <button
+                        type="submit"
+                        className="w-full bg-pink-600 text-white px-2 py-1 md:px-4 md:py-2 rounded-md text-sm md:text-base hover:bg-pink-700 transition"
+                      >
+                        Konfirmasi Pembayaran
+                      </button>
+                    </Link>
                   </div>
                 </form>
               </div>
