@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Cormorant_Garamond } from "next/font/google";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import WeddingCalendar from "../WeddingCalendar/page";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -387,6 +388,10 @@ export default function CatalogPage() {
             </div>
           ))}
         </div>
+      </div>
+
+      <div className="mt-16">
+        <WeddingCalendar />
       </div>
 
       {/* Modal Pembayaran - Improved Responsiveness */}
