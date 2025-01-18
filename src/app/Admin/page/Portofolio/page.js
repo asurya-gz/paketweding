@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   PlusCircle,
   Edit2,
@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 const PortfolioManagement = () => {
+  const fileInputRef = useRef(null);
   const [portfolioItems, setPortfolioItems] = useState([
     {
       id: 1,
@@ -18,11 +19,11 @@ const PortfolioManagement = () => {
       image: "/nikah.jpg",
       description: "Upacara sakral dengan nuansa tradisional yang memukau",
     },
-    // ... more items
   ]);
 
   const [editingItem, setEditingItem] = useState(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const categories = [
     "Pernikahan Adat",
@@ -33,6 +34,7 @@ const PortfolioManagement = () => {
 
   const handleEdit = (item) => {
     setEditingItem({ ...item });
+    setImagePreview(item.image);
     setIsAddingNew(false);
   };
 
@@ -44,7 +46,28 @@ const PortfolioManagement = () => {
       image: "",
       description: "",
     });
+    setImagePreview(null);
     setIsAddingNew(true);
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Create a preview URL for the selected image
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+
+      // In a real application, you would typically upload the file to a server here
+      // For this example, we'll just use the preview URL
+      setEditingItem({
+        ...editingItem,
+        image: previewUrl,
+      });
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current.click();
   };
 
   const handleSave = () => {
@@ -59,6 +82,7 @@ const PortfolioManagement = () => {
     }
     setEditingItem(null);
     setIsAddingNew(false);
+    setImagePreview(null);
   };
 
   const handleDelete = (id) => {
@@ -156,19 +180,27 @@ const PortfolioManagement = () => {
                       Gambar
                     </label>
                     <div className="flex items-center space-x-4">
-                      <div className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
-                        {editingItem.image ? (
+                      <div className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center overflow-hidden">
+                        {imagePreview ? (
                           <img
-                            src={editingItem.image}
+                            src={imagePreview}
                             alt="Preview"
-                            className="w-full h-full object-cover rounded-lg"
+                            className="w-full h-full object-cover"
                           />
                         ) : (
                           <ImageIcon className="w-8 h-8 text-gray-400" />
                         )}
                       </div>
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleImageUpload}
+                        accept="image/*"
+                        className="hidden"
+                      />
                       <button
                         type="button"
+                        onClick={triggerFileInput}
                         className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                       >
                         Upload Gambar
@@ -182,6 +214,7 @@ const PortfolioManagement = () => {
                       onClick={() => {
                         setEditingItem(null);
                         setIsAddingNew(false);
+                        setImagePreview(null);
                       }}
                       className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent inline-flex items-center"
                     >

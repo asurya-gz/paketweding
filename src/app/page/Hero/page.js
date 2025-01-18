@@ -53,7 +53,7 @@ export default function HeroSection() {
         </p>
         <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 px-4 sm:px-0">
           <Link
-            href="/page/Katalog"
+            href="/page/Fitur"
             className="
               bg-white 
               text-gray-900 

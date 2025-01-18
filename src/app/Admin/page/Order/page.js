@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import {
   Search,
@@ -6,59 +5,131 @@ import {
   MoreVertical,
   ChevronDown,
   Download,
+  Calendar,
+  MapPin,
+  Star,
+  MessageCircle,
 } from "lucide-react";
 
 const OrderManagement = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [showDropdown, setShowDropdown] = useState("");
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [newReview, setNewReview] = useState({
+    rating: 5,
+    comment: "",
+  });
 
-  // Sample data - in real app would come from API/database
-  const orders = [
+  // Combined data from both review components
+  const [orders, setOrders] = useState([
+    // Completed orders with reviews
     {
       id: "ORD-001",
-      customer: "Sarah Johnson",
-      package: "Wedding Premium",
-      date: "2024-03-15",
-      amount: "Rp 15.000.000",
-      status: "paid",
-      paymentProof: "/api/placeholder/100/100",
+      type: "completed",
+      packageName: "Paket Pernikahan Lengkap",
+      clientName: "Andi & Maya",
+      date: "2024-12-15",
+      venue: "Shangri-La Ballroom",
+      price: "Rp 85.000.000",
+      status: "completed",
+      hasReviewed: true,
+      review: {
+        rating: 5,
+        comment: "Pelayanan sangat memuaskan! Tim sangat profesional.",
+        date: "2024-12-20",
+      },
     },
+    // Ongoing orders
     {
       id: "ORD-002",
-      customer: "Michael Chen",
-      package: "Pre-Wedding Basic",
-      date: "2024-03-14",
-      amount: "Rp 8.500.000",
-      status: "pending",
-      paymentProof: "/api/placeholder/100/100",
+      type: "ongoing",
+      packageName: "Paket Pernikahan Lengkap",
+      clientName: "Budi & Sarah",
+      date: "2025-02-15",
+      venue: "Grand Ballroom Hotel Mulia",
+      price: "Rp 75.000.000",
+      status: "ongoing",
+      details: {
+        estimatedGuests: 500,
+        includedServices: [
+          "Dekorasi Lengkap",
+          "Katering 500 pax",
+          "Dokumentasi Full",
+          "Entertainment",
+        ],
+      },
     },
+    // Pending payment orders
     {
       id: "ORD-003",
-      customer: "Lisa Wong",
-      package: "Engagement Premium",
-      date: "2024-03-13",
-      amount: "Rp 12.000.000",
-      status: "confirmed",
-      paymentProof: "/api/placeholder/100/100",
+      type: "pending",
+      packageName: "Paket Dekorasi Premium",
+      clientName: "Ahmad & Linda",
+      date: "2025-03-20",
+      venue: "The Glass House",
+      price: "Rp 45.000.000",
+      status: "pending_payment",
+      details: {
+        estimatedGuests: 300,
+        includedServices: [
+          "Dekorasi Premium",
+          "Lighting System",
+          "Photo Booth",
+          "Flower Arrangements",
+        ],
+      },
     },
-  ];
+  ]);
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "paid":
+      case "completed":
         return "bg-green-100 text-green-800";
-      case "pending":
-        return "bg-yellow-100 text-yellow-800";
-      case "confirmed":
+      case "ongoing":
         return "bg-blue-100 text-blue-800";
+      case "pending_payment":
+        return "bg-yellow-100 text-yellow-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
   };
 
-  const handleDropdown = (orderId) => {
-    setShowDropdown(showDropdown === orderId ? "" : orderId);
+  const getStatusDisplay = (status) => {
+    switch (status) {
+      case "completed":
+        return "Selesai";
+      case "ongoing":
+        return "Berlangsung";
+      case "pending_payment":
+        return "Menunggu Pembayaran";
+      default:
+        return status;
+    }
+  };
+
+  const handlePaymentClick = (orderId) => {
+    router.push(`/page/DetailPembayaran?id=${orderId}`);
+  };
+
+  const StarRating = ({ rating, onRatingChange, readonly = false }) => {
+    return (
+      <div className="flex space-x-1">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <button
+            key={star}
+            onClick={() => !readonly && onRatingChange(star)}
+            disabled={readonly}
+            className={`${
+              star <= rating ? "text-yellow-400" : "text-gray-300"
+            } focus:outline-none ${!readonly && "hover:text-yellow-400"}`}
+          >
+            <Star className="w-6 h-6 fill-current" />
+          </button>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -66,35 +137,11 @@ const OrderManagement = () => {
       {/* Header Section */}
       <div className="mb-8">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-          Manajemen Pembayaran
+          Manajemen Pesanan
         </h1>
         <p className="text-gray-600">
-          Kelola semua transaksi pembayaran dalam satu dashboard
+          Kelola semua pesanan dalam satu dashboard
         </p>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white rounded-lg shadow p-4">
-          <p className="text-gray-600 text-sm mb-1">Total Pendapatan</p>
-          <p className="text-2xl font-bold text-gray-900">Rp 35.500.000</p>
-          <p className="text-sm text-green-600">+12.5% dari bulan lalu</p>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <p className="text-gray-600 text-sm mb-1">Pembayaran Pending</p>
-          <p className="text-2xl font-bold text-gray-900">5</p>
-          <p className="text-sm text-yellow-600">Perlu konfirmasi</p>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <p className="text-gray-600 text-sm mb-1">Pembayaran Sukses</p>
-          <p className="text-2xl font-bold text-gray-900">28</p>
-          <p className="text-sm text-green-600">Bulan ini</p>
-        </div>
-        <div className="bg-white rounded-lg shadow p-4">
-          <p className="text-gray-600 text-sm mb-1">Total Transaksi</p>
-          <p className="text-2xl font-bold text-gray-900">33</p>
-          <p className="text-sm text-blue-600">Semua waktu</p>
-        </div>
       </div>
 
       {/* Filters and Search */}
@@ -104,177 +151,223 @@ const OrderManagement = () => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
-              placeholder="Cari berdasarkan ID atau nama customer..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Cari berdasarkan nama client..."
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <div className="flex gap-4 w-full md:w-auto">
             <select
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 bg-white"
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
             >
               <option value="all">Semua Status</option>
-              <option value="paid">Dibayar</option>
-              <option value="pending">Pending</option>
-              <option value="confirmed">Dikonfirmasi</option>
+              <option value="completed">Selesai</option>
+              <option value="ongoing">Berlangsung</option>
+              <option value="pending_payment">Menunggu Pembayaran</option>
             </select>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
-              <Download className="w-5 h-5" />
-              <span className="hidden md:inline">Export</span>
-            </button>
           </div>
         </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full whitespace-nowrap">
-            <thead>
-              <tr className="bg-gray-50 text-left">
-                <th className="px-6 py-3 text-gray-600 text-sm font-semibold">
-                  ID Order
-                </th>
-                <th className="px-6 py-3 text-gray-600 text-sm font-semibold">
-                  Customer
-                </th>
-                <th className="px-6 py-3 text-gray-600 text-sm font-semibold">
-                  Paket
-                </th>
-                <th className="px-6 py-3 text-gray-600 text-sm font-semibold">
-                  Tanggal
-                </th>
-                <th className="px-6 py-3 text-gray-600 text-sm font-semibold">
-                  Jumlah
-                </th>
-                <th className="px-6 py-3 text-gray-600 text-sm font-semibold">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-gray-600 text-sm font-semibold">
-                  Bukti
-                </th>
-                <th className="px-6 py-3 text-gray-600 text-sm font-semibold">
-                  Aksi
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {orders.map((order) => (
-                <tr key={order.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <span className="text-sm font-medium text-gray-900">
-                      {order.id}
+      {/* Orders Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {orders
+          .filter(
+            (order) =>
+              selectedStatus === "all" || order.status === selectedStatus
+          )
+          .filter(
+            (order) =>
+              order.clientName
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase()) ||
+              order.packageName.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+          .map((order) => (
+            <div
+              key={order.id}
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+            >
+              <div className="p-6">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h2 className="text-xl font-semibold text-gray-900">
+                      {order.clientName}
+                    </h2>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {order.packageName}
+                    </p>
+                  </div>
+                  <span
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
+                      order.status
+                    )}`}
+                  >
+                    {getStatusDisplay(order.status)}
+                  </span>
+                </div>
+
+                <div className="mt-4 space-y-2">
+                  <div className="flex items-center text-gray-600">
+                    <Calendar className="w-5 h-5 mr-2" />
+                    <span>
+                      {new Date(order.date).toLocaleDateString("id-ID", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
                     </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-sm text-gray-900">
-                      {order.customer}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-sm text-gray-900">
-                      {order.package}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-sm text-gray-900">{order.date}</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-sm text-gray-900">
-                      {order.amount}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
-                        order.status
-                      )}`}
-                    >
-                      {order.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <img
-                      src={order.paymentProof}
-                      alt="Payment Proof"
-                      className="w-10 h-10 rounded object-cover cursor-pointer"
-                      onClick={() => {
-                        /* Handle image preview */
-                      }}
+                  </div>
+                  <div className="flex items-center text-gray-600">
+                    <MapPin className="w-5 h-5 mr-2" />
+                    <span>{order.venue}</span>
+                  </div>
+                </div>
+
+                {order.status === "completed" && order.hasReviewed && (
+                  <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <StarRating rating={order.review.rating} readonly />
+                    <p className="text-gray-600 text-sm mt-2">
+                      {order.review.comment}
+                    </p>
+                    <p className="text-gray-400 text-xs mt-2">
+                      Diulas pada:{" "}
+                      {new Date(order.review.date).toLocaleDateString()}
+                    </p>
+                  </div>
+                )}
+
+                <div className="mt-6 space-y-2">
+                  <button
+                    onClick={() => setSelectedOrder(order)}
+                    className="w-full bg-pink-600 text-white px-4 py-2 rounded-md hover:bg-pink-700 transition-colors duration-300"
+                  >
+                    Lihat Detail
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+      </div>
+
+      {/* Detail Modal */}
+      {selectedOrder && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h2 className="text-2xl font-semibold text-gray-900">
+                    {selectedOrder.clientName}
+                  </h2>
+                  <p className="text-gray-600">{selectedOrder.packageName}</p>
+                </div>
+                <button
+                  onClick={() => setSelectedOrder(null)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
                     />
-                  </td>
-                  <td className="px-6 py-4 relative">
-                    <button
-                      onClick={() => handleDropdown(order.id)}
-                      className="text-gray-400 hover:text-gray-600"
-                    >
-                      <MoreVertical className="w-5 h-5" />
-                    </button>
-                    {showDropdown === order.id && (
-                      <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
-                        <div className="py-1">
-                          <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Lihat Detail
-                          </button>
-                          <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Konfirmasi Pembayaran
-                          </button>
-                          <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Download Bukti
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                  </svg>
+                </button>
+              </div>
 
-        {/* Pagination */}
-        <div className="px-6 py-4 flex items-center justify-between border-t border-gray-200">
-          <div className="flex-1 flex justify-between sm:hidden">
-            <button className="px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-              Previous
-            </button>
-            <button className="px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-              Next
-            </button>
-          </div>
-          <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-            <div>
-              <p className="text-sm text-gray-700">
-                Showing <span className="font-medium">1</span> to{" "}
-                <span className="font-medium">10</span> of{" "}
-                <span className="font-medium">33</span> results
-              </p>
-            </div>
-            <div>
-              <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-                <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                  Previous
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-medium text-gray-900">Detail Acara</h3>
+                  <div className="mt-2 space-y-2">
+                    <p className="text-gray-600">
+                      Tanggal:{" "}
+                      {new Date(selectedOrder.date).toLocaleDateString(
+                        "id-ID",
+                        {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        }
+                      )}
+                    </p>
+                    <p className="text-gray-600">
+                      Lokasi: {selectedOrder.venue}
+                    </p>
+                    {selectedOrder.details && (
+                      <>
+                        <p className="text-gray-600">
+                          Estimasi Tamu: {selectedOrder.details.estimatedGuests}{" "}
+                          orang
+                        </p>
+                        <div>
+                          <h3 className="font-medium text-gray-900 mt-4">
+                            Layanan Termasuk
+                          </h3>
+                          <ul className="mt-2 space-y-1">
+                            {selectedOrder.details.includedServices.map(
+                              (service, index) => (
+                                <li
+                                  key={index}
+                                  className="flex items-center text-gray-600"
+                                >
+                                  <svg
+                                    className="h-5 w-5 mr-2 text-green-500"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="2"
+                                      d="M5 13l4 4L19 7"
+                                    />
+                                  </svg>
+                                  {service}
+                                </li>
+                              )
+                            )}
+                          </ul>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 flex justify-end space-x-3">
+                {selectedOrder.status === "pending_payment" && (
+                  <button
+                    onClick={() => {
+                      handlePaymentClick(selectedOrder.id);
+                      setSelectedOrder(null);
+                    }}
+                    className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors duration-300"
+                  >
+                    Lakukan Pembayaran
+                  </button>
+                )}
+                <button
+                  onClick={() => setSelectedOrder(null)}
+                  className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors duration-300"
+                >
+                  Tutup
                 </button>
-                <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                  1
-                </button>
-                <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                  2
-                </button>
-                <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                  3
-                </button>
-                <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                  Next
-                </button>
-              </nav>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

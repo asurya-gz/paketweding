@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { Cormorant_Garamond } from "next/font/google";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import WeddingCalendar from "../WeddingCalendar/page";
+import CustomPackageModal from "../KostumOrder/page";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -72,72 +72,16 @@ const services = [
   },
 ];
 
-const rekening = [
-  {
-    bank: "Bank BCA",
-    nomor: "1234567890",
-    atas_nama: "PT Wedding Organizer",
-  },
-  {
-    bank: "Bank Mandiri",
-    nomor: "0987654321",
-    atas_nama: "PT Wedding Organizer",
-  },
-];
-
 export default function CatalogPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedService, setSelectedService] = useState(null);
   const [activeTab, setActiveTab] = useState("paket"); // Default to paket tab on mobile
   const [selectedType, setSelectedType] = useState("all"); // Default "all" untuk menampilkan semua
-  const [formData, setFormData] = useState({
-    nama: "",
-    email: "",
-    telepon: "",
-    payment_method: "",
-  });
-
-  const paymentMethods = [
-    { id: "ewallet", name: "E-Wallet (GoPay, OVO, Dana)" },
-    { id: "bank", name: "Transfer Bank" },
-    { id: "credit_card", name: "Kartu Kredit" },
-  ];
-
-  const handlePaymentMethodChange = (e) => {
-    setFormData({ ...formData, payment_method: e.target.value });
-  };
-
-  const handlePayment = (e) => {
-    e.preventDefault();
-    console.log("Metode Pembayaran:", formData.payment_method);
-    // Integrasikan dengan API Payment Gateway di sini
-  };
-
-  const router = useRouter();
+  const [isCustomModalOpen, setIsCustomModalOpen] = useState(false);
 
   const handleBuyClick = (service) => {
     setSelectedService(service);
     setActiveTab("paket"); // Reset to paket tab when opening modal
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: files ? files[0] : value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Data Pembayaran:", { service: selectedService, ...formData });
-    setSelectedService(null);
-    setFormData({
-      nama: "",
-      email: "",
-      telepon: "",
-      bukti_pembayaran: null,
-    });
   };
 
   const typeOptions = [
@@ -156,27 +100,7 @@ export default function CatalogPage() {
   return (
     <div className="bg-white py-16 sm:py-24 min-h-screen">
       {/* Tombol back diposisikan absolute terhadap container */}
-      <div className="absolute top-6 left-6 sm:top-8 sm:left-8">
-        <button
-          onClick={() => router.back()}
-          className="inline-flex items-center group text-gray-600 hover:text-pink-600 transition-colors duration-200"
-        >
-          <svg
-            className="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform duration-200"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 19l-7-7m0 0l7-7m-7 7h18"
-            />
-          </svg>
-          <span className="text-sm font-medium">Kembali</span>
-        </button>
-      </div>
+      <div className="absolute top-6 left-6 sm:top-8 sm:left-8"></div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 text-center sm:mb-16">
           <h2
@@ -346,16 +270,16 @@ export default function CatalogPage() {
 
               <h3
                 className={`
-                  ${cormorant.className}
-                  mt-4
-                  mb-2 
-                  text-xl 
-                  font-light 
-                  text-black 
-                  tracking-wide
-                  sm:mb-3 
-                  sm:text-2xl 
-                `}
+          ${cormorant.className}
+          mt-4
+          mb-2 
+          text-xl 
+          font-light 
+          text-black 
+          tracking-wide
+          sm:mb-3 
+          sm:text-2xl 
+        `}
               >
                 {service.name}
               </h3>
@@ -387,6 +311,24 @@ export default function CatalogPage() {
               </button>
             </div>
           ))}
+
+          <div
+            onClick={() => setIsCustomModalOpen(true)}
+            className="group px-4 text-center sm:px-0 bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 min-h-[200px] flex flex-col items-center justify-center cursor-pointer"
+          >
+            <div className="text-4xl text-pink-600 mb-4">+</div>
+            <h3
+              className={`${cormorant.className} text-xl font-light text-black tracking-wide sm:text-2xl`}
+            >
+              Custom Paket
+            </h3>
+          </div>
+
+          {/* Add the CustomPackageModal */}
+          <CustomPackageModal
+            isOpen={isCustomModalOpen}
+            onClose={() => setIsCustomModalOpen(false)}
+          />
         </div>
       </div>
 
@@ -427,9 +369,7 @@ export default function CatalogPage() {
                   alt={selectedService.name}
                   className="w-full h-48 md:h-64 object-cover rounded-lg mb-4 md:mb-6"
                 />
-                <h2
-                  className={`${cormorant.className} text-xl md:text-2xl font-semibold text-black mb-2 md:mb-4`}
-                >
+                <h2 className="text-xl md:text-2xl font-semibold text-black mb-2 md:mb-4">
                   {selectedService.name}
                 </h2>
                 <p className="text-gray-600 mb-2 md:mb-4 text-sm md:text-base">
@@ -438,7 +378,7 @@ export default function CatalogPage() {
                 <div className="font-bold text-pink-600 text-lg md:text-xl mb-2 md:mb-4">
                   {selectedService.price}
                 </div>
-                <ul className="space-y-1 md:space-y-2 text-gray-700 text-sm md:text-base">
+                <ul className="space-y-1 md:space-y-2 text-gray-700 text-sm md:text-base mb-6">
                   {selectedService.features.map((feature, index) => (
                     <li key={index} className="flex items-center">
                       <svg
@@ -456,99 +396,241 @@ export default function CatalogPage() {
                     </li>
                   ))}
                 </ul>
+
+                {/* Ratings & Reviews Section */}
+                <div className="border-t border-gray-200 pt-6">
+                  <h3 className="text-lg font-semibold mb-4">
+                    Ulasan Pelanggan
+                  </h3>
+
+                  {/* Overall Rating */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="flex items-center">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <svg
+                            key={star}
+                            className={`w-5 h-5 ${
+                              star <= (selectedService.rating || 5)
+                                ? "text-yellow-400"
+                                : "text-gray-300"
+                            }`}
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))}
+                      </div>
+                      <span className="text-lg font-semibold">
+                        {selectedService.rating || 5}/5
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        ({selectedService.reviewCount || 24} ulasan)
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Individual Reviews */}
+                  <div className="space-y-4">
+                    {(
+                      selectedService.reviews || [
+                        {
+                          name: "Maya & Andi",
+                          rating: 5,
+                          date: "15 Des 2024",
+                          comment:
+                            "Pelayanan sangat memuaskan dan profesional. Hasil sesuai dengan ekspektasi kami.",
+                        },
+                        {
+                          name: "Deni & Lisa",
+                          rating: 4,
+                          date: "20 Nov 2024",
+                          comment:
+                            "Tim sangat membantu dalam perencanaan pernikahan kami. Recommended!",
+                        },
+                      ]
+                    ).map((review, index) => (
+                      <div
+                        key={index}
+                        className="border-b border-gray-200 pb-4"
+                      >
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="font-medium">{review.name}</span>
+                          <span className="text-sm text-gray-500">
+                            {review.date}
+                          </span>
+                        </div>
+                        <div className="flex items-center mb-2">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <svg
+                              key={star}
+                              className={`w-4 h-4 ${
+                                star <= review.rating
+                                  ? "text-yellow-400"
+                                  : "text-gray-300"
+                              }`}
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          ))}
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          {review.comment}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               {/* Sisi Kanan - Form Pembayaran */}
               <div className="w-full md:w-1/2 p-6 md:p-8 overflow-y-auto">
                 <h3 className="text-xl md:text-2xl font-semibold mb-4 md:mb-6 text-center">
-                  Form Pembayaran
+                  Form Pemesanan
                 </h3>
 
                 <form className="space-y-3 md:space-y-4">
-                  <div>
-                    <label className="block text-gray-700 mb-1 md:mb-2 text-sm md:text-base">
-                      Nama Lengkap
-                    </label>
-                    <input
-                      type="text"
-                      name="nama"
-                      value={formData.nama}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-2 py-1 md:px-3 md:py-2 border rounded-md text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-pink-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-700 mb-1 md:mb-2 text-sm md:text-base">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-2 py-1 md:px-3 md:py-2 border rounded-md text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-pink-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-700 mb-1 md:mb-2 text-sm md:text-base">
-                      Nomor Telepon
-                    </label>
-                    <input
-                      type="tel"
-                      name="telepon"
-                      value={formData.telepon}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-2 py-1 md:px-3 md:py-2 border rounded-md text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-pink-500"
-                    />
-                  </div>
-
-                  <div>
-                    <h4 className="text-base md:text-lg font-semibold mb-2 md:mb-3">
-                      Pilih Metode Pembayaran
+                  {/* Informasi Pasangan */}
+                  <div className="border-b pb-4 mb-4">
+                    <h4 className="text-lg font-semibold mb-3">
+                      Informasi Pasangan
                     </h4>
-                    <div className="space-y-2">
-                      {paymentMethods.map((method, index) => (
-                        <div key={index} className="flex items-center">
-                          <input
-                            type="radio"
-                            id={`method-${index}`}
-                            name="payment_method"
-                            value={method.id}
-                            onChange={handlePaymentMethodChange} // Fungsi untuk menangani pilihan metode pembayaran
-                            required
-                            className="mr-2"
-                          />
-                          <label
-                            htmlFor={`method-${index}`}
-                            className="text-sm md:text-base"
-                          >
-                            {method.name}
-                          </label>
-                        </div>
-                      ))}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-gray-700 mb-1 text-sm">
+                          Nama Pengantin Pria
+                        </label>
+                        <input
+                          type="text"
+                          name="groomName"
+                          required
+                          className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-700 mb-1 text-sm">
+                          Nama Pengantin Wanita
+                        </label>
+                        <input
+                          type="text"
+                          name="brideName"
+                          required
+                          className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        />
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex justify-between space-x-4 pt-2 md:pt-4">
+                  {/* Informasi Acara */}
+                  <div className="border-b pb-4 mb-4">
+                    <h4 className="text-lg font-semibold mb-3">
+                      Informasi Acara
+                    </h4>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-gray-700 mb-1 text-sm">
+                          Tanggal Pernikahan
+                        </label>
+                        <input
+                          type="date"
+                          name="weddingDate"
+                          required
+                          className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-700 mb-1 text-sm">
+                          Estimasi Jumlah Tamu
+                        </label>
+                        <input
+                          type="number"
+                          name="guestCount"
+                          placeholder="Masukkan perkiraan jumlah tamu"
+                          required
+                          className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-700 mb-1 text-sm">
+                          Lokasi Acara
+                        </label>
+                        <input
+                          type="text"
+                          name="venue"
+                          placeholder="Nama gedung/tempat acara"
+                          required
+                          className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 mb-2"
+                        />
+                        <textarea
+                          name="venueAddress"
+                          placeholder="Alamat lengkap lokasi"
+                          rows={2}
+                          required
+                          className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Informasi Kontak */}
+                  <div className="border-b pb-4 mb-4">
+                    <h4 className="text-lg font-semibold mb-3">
+                      Informasi Kontak
+                    </h4>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-gray-700 mb-1 text-sm">
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          name="email"
+                          required
+                          className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-700 mb-1 text-sm">
+                          Nomor WhatsApp
+                        </label>
+                        <input
+                          type="tel"
+                          name="whatsapp"
+                          required
+                          className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-700 mb-1 text-sm">
+                          Nomor Telepon Alternatif
+                        </label>
+                        <input
+                          type="tel"
+                          name="altPhone"
+                          className="w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Tombol */}
+                  <div className="flex justify-between space-x-4 pt-4">
                     <button
                       type="button"
                       onClick={() => setSelectedService(null)}
-                      className="w-full bg-gray-200 text-gray-700 px-2 py-1 md:px-4 md:py-2 rounded-md text-sm md:text-base hover:bg-gray-300 transition"
+                      className="w-full bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm hover:bg-gray-300 transition"
                     >
                       Batal
                     </button>
                     <Link href="/page/DetailPembayaran">
-                      {" "}
                       <button
                         type="submit"
-                        className="w-full bg-pink-600 text-white px-2 py-1 md:px-4 md:py-2 rounded-md text-sm md:text-base hover:bg-pink-700 transition"
+                        className="w-full bg-pink-600 text-white px-4 py-2 rounded-md text-sm hover:bg-pink-700 transition"
                       >
-                        Konfirmasi Pembayaran
+                        Lanjutkan ke Pembayaran
                       </button>
                     </Link>
                   </div>

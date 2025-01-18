@@ -1,18 +1,44 @@
 "use client";
 import React, { useState } from "react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+} from "recharts";
 
 const DashboardAdmin = () => {
-  // Sample data - replace with your actual data
+  const [chartType, setChartType] = useState("line"); // 'line' or 'bar'
+
   const analyticsData = {
     revenue: {
       total: 750000000,
       growth: 12.5,
       lastMonth: 150000000,
+      monthly: [
+        { month: "Jan", value: 120000000 },
+        { month: "Feb", value: 140000000 },
+        { month: "Mar", value: 130000000 },
+        { month: "Apr", value: 150000000 },
+        { month: "May", value: 210000000 },
+      ],
     },
     orders: {
       total: 30,
       active: 8,
       completed: 22,
+      monthly: [
+        { month: "Jan", orders: 5 },
+        { month: "Feb", orders: 7 },
+        { month: "Mar", orders: 6 },
+        { month: "Apr", orders: 8 },
+        { month: "May", orders: 4 },
+      ],
     },
     packages: [
       {
@@ -155,6 +181,109 @@ const DashboardAdmin = () => {
             <h3 className="text-gray-500">Tingkat Konversi</h3>
             <p className="text-2xl font-semibold mt-2">68%</p>
             <p className="text-sm text-gray-500 mt-1">Dari total inquiry</p>
+          </div>
+        </div>
+
+        {/* Visual Representations Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Monthly Revenue Visualization */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold text-gray-800">
+                Pendapatan Bulanan
+              </h2>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setChartType("line")}
+                  className={`px-3 py-1 rounded ${
+                    chartType === "line"
+                      ? "bg-pink-500 text-white"
+                      : "bg-gray-100"
+                  }`}
+                >
+                  Line
+                </button>
+                <button
+                  onClick={() => setChartType("bar")}
+                  className={`px-3 py-1 rounded ${
+                    chartType === "bar"
+                      ? "bg-pink-500 text-white"
+                      : "bg-gray-100"
+                  }`}
+                >
+                  Bar
+                </button>
+              </div>
+            </div>
+            <div className="h-80 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                {chartType === "line" ? (
+                  <LineChart data={analyticsData.revenue.monthly}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis
+                      tickFormatter={(value) => `Rp ${value / 1000000}M`}
+                    />
+                    <Tooltip
+                      formatter={(value) => formatCurrency(value)}
+                      labelFormatter={(label) => `Bulan: ${label}`}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="value"
+                      stroke="#ec4899"
+                      strokeWidth={2}
+                      dot={{ fill: "#ec4899" }}
+                    />
+                  </LineChart>
+                ) : (
+                  <BarChart data={analyticsData.revenue.monthly}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis
+                      tickFormatter={(value) => `Rp ${value / 1000000}M`}
+                    />
+                    <Tooltip
+                      formatter={(value) => formatCurrency(value)}
+                      labelFormatter={(label) => `Bulan: ${label}`}
+                    />
+                    <Bar dataKey="value" fill="#ec4899" />
+                  </BarChart>
+                )}
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Package Distribution */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+              Distribusi Paket
+            </h2>
+            <div className="space-y-4">
+              {analyticsData.packages.map((pkg, index) => (
+                <div key={index} className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>{pkg.name}</span>
+                    <span>{pkg.bookings} bookings</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-pink-500 h-2 rounded-full"
+                      style={{
+                        width: `${
+                          (pkg.bookings /
+                            analyticsData.packages.reduce(
+                              (acc, curr) => acc + curr.bookings,
+                              0
+                            )) *
+                          100
+                        }%`,
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

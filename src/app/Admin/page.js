@@ -193,13 +193,8 @@ const Sidebar = ({
     },
     {
       icon: <List size={20} />,
-      label: "Katalog",
+      label: "Manajemen Katalog",
       key: "catalog",
-    },
-    {
-      icon: <Settings size={20} />,
-      label: "Manajemen Layanan",
-      key: "service-management",
     },
     {
       icon: <Image size={20} />,
@@ -219,11 +214,7 @@ const Sidebar = ({
   ];
 
   const handleLogout = () => {
-    // Implement logout logic here (e.g., clear tokens, redirect to login)
-    // Example:
-    // localStorage.removeItem('authToken');
-    // clearUserSession();
-    router.push("/login");
+    router.push("/page/Logout");
   };
 
   return (
@@ -295,7 +286,7 @@ const Sidebar = ({
               Ubah Kata Sandi
             </button>
             <button
-              onClick={() => setIsLogoutModalOpen(true)}
+              onClick={handleLogout}
               className="w-full flex items-center p-3 rounded-lg hover:bg-pink-100 text-gray-700"
             >
               <span className="mr-3">
@@ -320,8 +311,6 @@ const ContentArea = ({ activeMenu }) => {
         return <TeamManagement />;
       case "catalog":
         return <Catalog />;
-      case "service-management":
-        return <ServiceManagement />;
       case "portfolio-management":
         return <PortfolioManagement />;
       case "user-management":
@@ -342,7 +331,7 @@ const ContentArea = ({ activeMenu }) => {
 
 // Main Admin Dashboard Component
 export default function AdminDashboard() {
-  const [activeMenu, setActiveMenu] = useState("");
+  const [activeMenu, setActiveMenu] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (

@@ -17,6 +17,8 @@ const montserrat = Montserrat({
 const BaseLayout = ({ children, isLoggedIn = true }) => {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileReviewOpen, setMobileReviewOpen] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -28,7 +30,6 @@ const BaseLayout = ({ children, isLoggedIn = true }) => {
 
   return (
     <div className={`min-h-screen bg-white ${montserrat.className}`}>
-      {/* Navigasi Responsif */}
       <nav className="fixed top-0 w-full bg-white shadow-sm z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-24 items-center relative">
@@ -71,12 +72,45 @@ const BaseLayout = ({ children, isLoggedIn = true }) => {
               >
                 Layanan
               </Link>
-              <Link
-                href="/page/Review"
-                className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
-              >
-                Review
-              </Link>
+              {/* Review with Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setReviewOpen(!reviewOpen)}
+                  onMouseEnter={() =>
+                    window.innerWidth >= 1024 && setReviewOpen(true)
+                  }
+                  onMouseLeave={() =>
+                    window.innerWidth >= 1024 && setReviewOpen(false)
+                  }
+                  className="text-gray-800 hover:text-black text-sm tracking-widest uppercase focus:outline-none"
+                >
+                  Pesanan
+                </button>
+                {reviewOpen && (
+                  <div
+                    className="absolute top-full left-0 bg-white shadow-lg py-2 w-48"
+                    onMouseEnter={() =>
+                      window.innerWidth >= 1024 && setReviewOpen(true)
+                    }
+                    onMouseLeave={() =>
+                      window.innerWidth >= 1024 && setReviewOpen(false)
+                    }
+                  >
+                    <Link
+                      href="/page/PaketSelesai"
+                      className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                    >
+                      Paket Selesai
+                    </Link>
+                    <Link
+                      href="/page/PaketBerlangsung"
+                      className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                    >
+                      Paket Berlangsung
+                    </Link>
+                  </div>
+                )}
+              </div>
               <Link
                 href="/page/Tim"
                 className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
@@ -168,13 +202,33 @@ const BaseLayout = ({ children, isLoggedIn = true }) => {
                 >
                   Layanan
                 </Link>
-                <Link
-                  href="/page/Review"
-                  className="text-gray-800 hover:text-black text-sm tracking-widest uppercase"
-                  onClick={toggleMobileMenu}
-                >
-                  Review
-                </Link>
+                {/* Review Mobile Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => setMobileReviewOpen(!mobileReviewOpen)}
+                    className="text-gray-800 hover:text-black text-sm tracking-widest uppercase w-full text-left"
+                  >
+                    Review
+                  </button>
+                  {mobileReviewOpen && (
+                    <div className="pl-4 space-y-2 mt-2">
+                      <Link
+                        href="/page/Review/Selesai"
+                        className="block text-gray-800 hover:text-black text-sm tracking-widest uppercase"
+                        onClick={toggleMobileMenu}
+                      >
+                        Selesai
+                      </Link>
+                      <Link
+                        href="/page/Review/Berlangsung"
+                        className="block text-gray-800 hover:text-black text-sm tracking-widest uppercase"
+                        onClick={toggleMobileMenu}
+                      >
+                        Berlangsung
+                      </Link>
+                    </div>
+                  )}
+                </div>
                 {isLoggedIn ? (
                   <>
                     <Link
